@@ -1,0 +1,78 @@
+﻿@model SpiceApp.Models.ViewModels.IndexViewModel
+
+@{ ViewData["Title"] = "Index"; }
+
+<style>
+    .menu-filter-list li {
+        display: inline-block;
+        cursor: pointer;
+        padding: 10px 20px 10px;
+        text-transform: uppercase;
+        background: #f5f5f5;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 13px;
+        -moz-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+        font-family: "Poppins",sans-serif;
+    }
+
+        .menu-filter-list li.is-checke, .menu-filter-list li:hover {
+            background-color: #545b62;
+            color: #fff;
+        }
+
+</style>
+<br />
+<br />
+<div class="backgroundWhite container">
+
+    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+        <li class="active btn btn-secondary ml-1 mr-1" data-filter=".menu-restaurant">Show All</li>
+
+        @foreach (var item in Model.Category)
+        {
+<li class="ml-1 mr-1" data-filter=".@item.CategoryName.Replace(" ",string.Empty)">@item.CategoryName</li>
+}
+    </ul>
+
+
+    @foreach (var category in Model.Category)
+    {
+<div class="row" id="menu-wrapper">
+    <partial name="_ShowProductsOfACategory" model="@Model.MenuItem.Where(u=>u.Category.CategoryName.Equals(category.CategoryName))" />
+</div>}
+</div>
+
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+
+    <script>
+        var posts = $('.post');
+
+    (function ($) {
+
+        $("#menu-filters li").click(function () {
+            $("#menu-filters li").removeClass('active btn btn-secondary');
+            $(this).addClass('active btn btn-secondary');
+
+            var selectedFilter = $(this).data("filter");
+
+            $(".menu-restaurant").fadeOut();
+
+            setTimeout(function () {
+                
+                $(selectedFilter).slideDown();
+            }, 300);
+        });
+
+
+
+    })(jQuery);
+    </script>
+}
